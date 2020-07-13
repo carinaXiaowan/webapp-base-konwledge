@@ -1,0 +1,23 @@
+*{
+    margin:0px;
+    padding:0;
+}
+ul,li{
+    list-style-type: none;
+}
+.wrap{
+    width: 400px;
+    height: 50px;      
+}
+.left{
+    float: left;
+    width: 100px;
+    height: 100%;
+    background: yellow;
+}
+.right{
+    float: right;
+    width: 100px;
+    height: 100%;
+    background: yellow;
+}   
