@@ -8,9 +8,17 @@
     <link rel="stylesheet" href="/assets/styles/common.css">
 </head>
 <body>
-    <div class='wrap'>
-       <div class="left">我是左侧</div>
-       <div class="right">我是右侧</div>
+    <div class='wrap'>      
     </div>
 </body>
+<script>
+    //rem定义
+    (function(){
+        var styleNode =document.createElement('style');
+        var w = document.documentElement.clientWidth/16;
+        styleNode.innerHTML="html{font-size: "+w+"px!important}"
+        document.head.appendChild(styleNode);
+    })()
+    
+</script>       
 </html>     

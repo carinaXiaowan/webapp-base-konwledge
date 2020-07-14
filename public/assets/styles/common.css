@@ -6,18 +6,8 @@ ul,li{
     list-style-type: none;
 }
 .wrap{
-    width: 400px;
-    height: 50px;      
+    width: 8rem;
+    height: 8rem; 
+    background: pink;   
 }
-.left{
-    float: left;
-    width: 100px;
-    height: 100%;
-    background: yellow;
-}
-.right{
-    float: right;
-    width: 100px;
-    height: 100%;
-    background: yellow;
-}   
+    

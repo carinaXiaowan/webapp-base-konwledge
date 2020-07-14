@@ -21,3 +21,7 @@ dpi（ 位图像素）
 ```
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 ```
+
+#### rem
+定义： rem相当于根标签（html）的fontSize   1rem = html的fontSize
+适配： 适应不同设备等比
