@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" >
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>webapp demo</title>
     <link rel="stylesheet" href="/assets/styles/common.css">
@@ -12,8 +12,14 @@
     </div>
 </body>
 <script>
-    //rem定义
+    // 设配方案
     (function(){
+        //方案一   viewport的适配   将所有设备都转化成设计稿尺寸（所量即所得）  
+        var targetW = 750+"px";
+        var scale = document.documentElement.clientWidth/targetW;
+        var meta = document.querySelector('meta[name="viewport"]');
+        meta.content="initial-scale="+scale; 
+        //方案二   rem的适配     尺寸根据视口宽度来  rem的定义  
         var styleNode =document.createElement('style');
         var w = document.documentElement.clientWidth/16;
         styleNode.innerHTML="html{font-size: "+w+"px!important}"

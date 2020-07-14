@@ -16,7 +16,8 @@ dpi（ 位图像素）
 设备独立像素    
 定义：css像素转物理像素重要的中间过程
 
-设计图2x是像素比为2的手机使用， 3x是像素比为3的手机使用         
+设计图2x是像素比为2的手机使用， 3x是像素比为3的手机使用   
+      
 #### viewPort的meta标签(苹果发明的，桌面浏览器不支持)
 ```
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,3 +26,22 @@ dpi（ 位图像素）
 #### rem
 定义： rem相当于根标签（html）的fontSize   1rem = html的fontSize
 适配： 适应不同设备等比
+```
+//rem的适配     尺寸根据视口宽度来  rem的定义  
+var styleNode =document.createElement('style');
+var w = document.documentElement.clientWidth/16;
+styleNode.innerHTML="html{font-size: "+w+"px!important}"
+document.head.appendChild(styleNode);
+
+```
+
+#### viewport适配
+```
+// viewport的适配   将所有设备都转化成设计稿尺寸（所量即所得）  
+var targetW = 750+"px";
+var scale = document.documentElement.clientWidth/targetW;
+var meta = document.querySelector('meta[name="viewport"]');
+meta.content="initial-scale="+scale; 
+优点： 所量即所得
+缺点： 没有使用完美视口
+```
