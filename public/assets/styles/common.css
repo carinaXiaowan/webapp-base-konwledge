@@ -5,9 +5,26 @@
 ul,li{
     list-style-type: none;
 }
-.wrap{
+.wrap, .viewport, .rem{
     width: 8rem;
     height: 8rem; 
     background: pink;   
+}
+
+.onepx{
+    height: 1px;
+    background: red;
+    margin-top: 1rem;
+} 
+
+@media only screen and (-webkit-device-pixel-ratio: 2){
+    .onepx{
+        transform: scaleY(0.5);
+    }
+}
+@media only screen and (-webkit-device-pixel-ratio: 3){
+    .onepx{
+            transform: scaleY(0.333333333);
+        }
 }
     

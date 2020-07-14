@@ -17,7 +17,7 @@ dpi（ 位图像素）
 定义：css像素转物理像素重要的中间过程
 
 设计图2x是像素比为2的手机使用， 3x是像素比为3的手机使用   
-      
+
 #### viewPort的meta标签(苹果发明的，桌面浏览器不支持)
 ```
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,4 +44,41 @@ var meta = document.querySelector('meta[name="viewport"]');
 meta.content="initial-scale="+scale; 
 优点： 所量即所得
 缺点： 没有使用完美视口
+
+```
+##### 1px实现
+```
+css实现
+@media only screen and (-webkit-device-pixel-ratio: 2){
+    .onepx{
+        transform: scaleY(0.5);
+    }
+}
+@media only screen and (-webkit-device-pixel-ratio: 3){
+    .onepx{
+            transform: scaleY(0.333333333);
+        }
+}
+
+viewport实现
+var dpr = window.devicePixelRatio || 1;
+var scale = 1 / dpr;
+
+//方案二   rem的适配     尺寸根据视口宽度来  rem的定义  
+var styleNode =document.createElement('style');
+var w = document.documentElement.clientWidth/16;
+styleNode.innerHTML="html{font-size: "+w+"px!important}"
+document.head.appendChild(styleNode);
+
+// 缩小操作
+var meta = document.querySelector("meta[name='viewport']");
+meta.content = "width=device-width,initial-scale=" + scale + ",user-scalable=no,minimum-scale=" + scale + ",maximum-scale=" + scale;
+```
+
+#### 基础事件
+```
+触屏 指针事件
+touchstart
+touchmove(不可能单独触发)
+touchEnd
 ```

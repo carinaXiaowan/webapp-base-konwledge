@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" >
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>webapp demo</title>
+    <link rel="stylesheet" href="/assets/styles/common.css">
+</head>
+<body>
+    <div class='rem'> 
+        rem     
+    </div>
+</body>
+<script>
+    // 设配方案
+    (function(){
+        //方案二   rem的适配     尺寸根据视口宽度来  rem的定义  
+        var styleNode =document.createElement('style');
+        var w = document.documentElement.clientWidth/16;
+        styleNode.innerHTML="html{font-size: "+w+"px!important}"
+        document.head.appendChild(styleNode);
+    })()
+    
+</script>       
+</html>     

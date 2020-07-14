@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" >
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>阻止事件默认行为</title>
+    <link rel="stylesheet" href="/assets/styles/common.css">
+</head>
+<body>
+    <div class='wrap'> 
+          wrap
+    </div>
+</body>
+<script>
+    window.onload = function(){
+        var item = document.querySelector('.wrap');
+        item.addEventListener('touchstart',function(ev){
+            ev = ev || event;
+            ev.preventDefault();
+            console.info('ontouchstart')
+        })
+        item.addEventListener('touchmove',function(){
+            console.info('touchmove')
+        })
+        item.addEventListener('touchend',function(){
+            console.info('touchend')
+        })
+
+
+        changeToRem();
+    }
+    // 设配方案
+   function changeToRem (){
+        var styleNode =document.createElement('style');
+        var w = document.documentElement.clientWidth/16;
+        styleNode.innerHTML="html{font-size: "+w+"px!important}"
+        document.head.appendChild(styleNode);
+   }
+</script>       
+</html>     
