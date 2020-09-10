@@ -1,33 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" >
+    <meta name="viewport">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>webapp demo</title>
     <link rel="stylesheet" href="/assets/styles/common.css">
 </head>
+
 <body>
-    <div class='onepx'> 
-          
+    <div class='onepx'>
+
     </div>
 </body>
 <script>
     // 设配方案
-    (function(){
-                var dpr = window.devicePixelRatio || 1;
-                var scale = 1 / dpr;
-                
-                //方案二   rem的适配     尺寸根据视口宽度来  rem的定义  
-                var styleNode =document.createElement('style');
-                var w = document.documentElement.clientWidth/16;
-                styleNode.innerHTML="html{font-size: "+w+"px!important}"
-                document.head.appendChild(styleNode);
+    (function () {
+        var dpr = window.devicePixelRatio || 1;
+        var scale = 1 / dpr;
 
-                // 缩小操作
-                var meta = document.querySelector("meta[name='viewport']");
-                meta.content = "width=device-width,initial-scale=" + scale + ",user-scalable=no,minimum-scale=" + scale + ",maximum-scale=" + scale;
+        //方案二   rem的适配     尺寸根据视口宽度来  rem的定义  
+        var styleNode = document.createElement('style');
+        var w = document.documentElement.clientWidth / 16;
+        styleNode.innerHTML = "html{font-size: " + w + "px!important}"
+        document.head.appendChild(styleNode);
+
+        // 缩小操作
+        var meta = document.querySelector("meta[name='viewport']");
+        meta.content = "width=device-width,initial-scale=" + scale + ",user-scalable=no,minimum-scale=" + scale +
+            ",maximum-scale=" + scale;
     })()
-    
-</script>       
-</html>     
+</script>
+
+</html>

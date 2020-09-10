@@ -1,0 +1,28 @@
+*{
+    margin:0px;
+    padding:0;
+}
+html,body{
+    height: 100%;
+    overflow: hidden;
+}
+#wrap{
+    height: 100%;
+    overflow: hidden;
+}
+.courseWrap{
+    width: 100%;    
+}
+
+.courseWrap .list a,.courseWrap .list a img{
+    width: 100%;
+    display: block;
+}
+
+.courseWrap .list a img{
+    width: 100%;
+}
+
+.courseWrap .list li{
+    float: left;
+}
