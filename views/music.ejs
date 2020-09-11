@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1 " />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>music tai</title>
+  <link rel="stylesheet" href="/assets/styles/music.css" />
+</head>
+
+<body>
+  <!-- 导航 -->
+  <div id='wrap'>
+    <div class="head">
+      <div class="head-top">
+        <h1 class="logo">
+          <a href="http://www.atguigu.com">
+            <img src="http://pc1.gtimg.com/act/sem/202007qqmusic/images/logo-c25031e228.png" alt="音乐">
+          </a>
+        </h1>
+        <div class="btns">
+          <a href="javascript:;">搜索</a>
+          <a href="javascript:;">登录</a>
+          <a href="javascript:;">注册</a>
+        </div>
+      </div>
+      <div class="head-bottom">
+        <input class='searchInp' placeholder="请输入搜索名称" type="text">
+        <a href="javascrit:;" class='search'>搜索</a>
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+  window.onload = function () {
+    // 阻止事件的默认行为
+    document.addEventListener("touchStart", function (ev) {
+      ev = ev || event;
+      ev.preventDefault();
+    });
+    // 适配方案
+    (function () {
+      //chrome下字体的默认大小是16
+      //方案二   rem的适配     尺寸根据视口宽度来  rem的定义
+      var styleNode = document.createElement("style");
+      var w = document.documentElement.clientWidth / 16; //除以16的目的是不希望出现小数，初始定义视口宽度为1rem,但是这样会出现小数，所以除以16方便计算
+      styleNode.innerHTML = "html{font-size: " + w + "px!important}";
+      document.head.appendChild(styleNode);
+    })();
+
+
+  };
+</script>
+
+</html>

@@ -19,5 +19,8 @@ app.get('/eventTouch',function(req, res){
 app.get('/index',function(req, res){
     res.render('index', {});
 })
+app.get('/music',function(req, res){
+    res.render('music', {});
+})
 app.listen(3000);
 console.info('serve is listen at 3000');

@@ -1,0 +1,77 @@
+html,body,ul,li,dl,ol,h1,h2,h3,h4,h5,div,p,a,span,form,input,select{margin:0;padding:0;box-sizing: border-box;outline: none};
+html,body{width: 100%;height: 100%;overflow: hidden;}
+ul,li{list-style: none;}
+a{ text-decoration: none;}
+a,img{ display: block;}
+a,input,button{-webkit-tap-highlight-color: rgba(0,0,0); -webkit-appearance: none;}
+
+/* 
+    16rem == 375px   1rem == 375/16    20px就是  20*16/375 
+    所以定义baseRem为 16/375,方便后续计算，所量即所得
+*/
+:root {
+    --hover: #2170d6;
+    --bar: rgb(226, 225, 225);
+    --navcolor:#232323;
+    --baserem: 16/375;  
+}
+
+
+#wrap{
+    height: 100%;
+    overflow: hidden;
+    background: #eee;
+}
+#wrap .head{
+    position: absolute;
+    width: 100%;
+    height:calc(var(--baserem)*100rem) ;
+    background: var(--navcolor);
+}
+#wrap .head .head-top{
+    height:calc(var(--baserem)*50rem);
+    display: flex;
+    justify-content:space-between;
+}
+#wrap .head .head-top .logo, #wrap .head .head-top .logo img{
+    width: calc(var(--baserem)*40rem);
+    height: calc(var(--baserem)*40rem);
+    margin-left: calc(var(--baserem)*20rem);
+}
+#wrap .head .head-top .logo{
+    margin-top: calc(var(--baserem)*5rem);
+}
+#wrap .head .head-top .btns{
+    font-size: calc(var(--baserem)*14rem);
+    padding-right: calc(var(--baserem)*10rem);
+    display: flex;
+}
+#wrap .head .head-top .btns a{
+    margin-left: calc(var(--baserem)*5rem);
+    line-height: calc(var(--baserem)*50rem);
+    color:#fff;
+}
+#wrap .head .head-top .btns a:hover{
+    color: var(--hover)
+}
+
+#wrap .head .head-bottom{
+    height:calc(var(--baserem)*50rem);
+    padding: calc(var(--baserem)*5rem) calc(var(--baserem)*10rem) calc(var(--baserem)*15rem);
+    display: flex;
+}
+#wrap .head .head-bottom .searchInp{
+    flex:1;
+    border: calc(var(--baserem)*1rem) solid #232323;
+    padding-left: calc(var(--baserem)*10rem);
+}
+#wrap .head .head-bottom .search{
+    width: calc(var(--baserem)*60rem);
+    height: calc(var(--baserem)*30rem);
+    background: #474737;
+    line-height: calc(var(--baserem)*30rem);
+    margin-left: calc(var(--baserem)*5rem);
+    font-size: calc(var(--baserem)*14rem);
+    text-align: center;
+    color: #eee;
+}
