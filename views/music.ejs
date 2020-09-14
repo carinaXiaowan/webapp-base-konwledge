@@ -211,12 +211,16 @@
 
       //   滑屏
       var starX = 0; //手指开始点击的位置
+      var starY = 0;
       var elementX = 0; //元素一开始的位置
+      var elementY = 0
       courseWrap.addEventListener('touchstart', function (ev) {
         ev = ev || event;
         var touchC = ev.changedTouches[0];
         starX = touchC.clientX;
+        starY = touchC.clientY;
         elementX = transePlugin.damu(ulNode, 'translateX');
+        elementY = transePlugin.damu(ulNode, 'translateY');
         // 无缝逻辑  点击第一组的第一张时，瞬间跳到第二组的最后一张，点击第二组的最后一张，瞬间跳到第一组的第一张
         var index = transePlugin.damu(ulNode, 'translateX') / document.documentElement.clientWidth; //index代表ul的位置
         if (-index === 0) {
@@ -231,7 +235,12 @@
         ev = ev || event;
         var touchC = ev.changedTouches[0];
         var nowX = touchC.clientX;
-        var disX = nowX - starX;
+        var nowY = touchC.clientY;
+        var disX = nowX - starX;    
+        var disY = nowY - starY;    
+        if(Math.abs(disY) > Math.abs(disX)){ //说明在Y轴上滑动
+          return; //目的是防抖动，上下滚动，不触发轮播图
+        }
         transePlugin.damu(ulNode, 'translateX', elementX + disX);
       })
       courseWrap.addEventListener('touchend', function (ev) {
