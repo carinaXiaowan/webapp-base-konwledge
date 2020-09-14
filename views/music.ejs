@@ -30,8 +30,9 @@
         <a href="javascrit:;" class='search'>搜索</a>
       </div>
     </div>
-    <!-- 导航 -->
+
     <div class="content">
+      <!-- 导航 -->
       <div class="nav onepx">
         <ul class='list'>
           <li>
@@ -69,9 +70,15 @@
           </li>
         </ul>
       </div>
+      <!-- 导航结束 -->
+      <!-- 轮播图开始 -->
+      <div class="courseWrap">
+        <!-- 具体内容 -->
+      </div>
+      <!-- 轮播图结束 -->
     </div>
-    <!-- 导航结束 -->
   </div>
+
 </body>
 <script src='/damu.js'></script>
 <script>
@@ -90,8 +97,15 @@
       styleNode.innerHTML = "html{font-size: " + w + "px!important}";
       document.head.appendChild(styleNode);
     })();
+    var arr = [
+      "https://iknow-pic.cdn.bcebos.com/b64543a98226cffc192273a6b9014a90f603ea9e",
+      "https://image-c-dev.weimobwmc.com/qa-saas-wxbiz/b3854b2e1af0462c8e845840c200b888.jpeg?imageMogr2/thumbnail/500x",
+      "https://image-c-dev.weimobwmc.com/qa-saas-wxbiz/ac5bfeedc57441c69ef27023336f7a1d.jpg?imageMogr2/thumbnail/500x",
+    ];
+
     var init = function () {
       drag();
+      carouse(arr);
     }
     // 导航滑屏
     var drag = function () {
@@ -113,7 +127,7 @@
         startX = touchC.clientX;
         elementX = transePlugin.damu(dragItem, 'translateX');
         dragItem.style.transition = "none";
-        
+
         // 快速滑屏
         lastTime = new Date().getTime();
         lastPoint = transePlugin.damu(dragItem, 'translateX');
@@ -150,12 +164,12 @@
 
       dragArea.addEventListener('touchend', function (ev) {
         var translateX = transePlugin.damu(dragItem, 'translateX');
-        timeDis = timeDis==0 ? 1 : timeDis; //防止点击后，时间差为0；
-        var speed = pointDis/timeDis; //快速滑屏   速度越大，位移越远
+        timeDis = timeDis == 0 ? 1 : timeDis; //防止点击后，时间差为0；
+        var speed = pointDis / timeDis; //快速滑屏   速度越大，位移越远
         speed = Math.abs(speed) < 0.5 ? 0 : speed; //防止中间块滑动的时候，产生抖动
-        var targetX = translateX + speed*200;
-        var time = Math.abs(speed)*0.2;
-        time = time <1 ? 1 : time;
+        var targetX = translateX + speed * 200;
+        var time = Math.abs(speed) * 0.2;
+        time = time < 1 ? 1 : time;
         var bsr = '';
         if (targetX > 0) {
           targetX = 0;
@@ -164,13 +178,74 @@
           targetX = miniX;
           bsr = 'cubic-bezier(0.26,1,0.68,1)';
         }
-        dragItem.style.transition = time+'s '+bsr+'transform';
+        dragItem.style.transition = time + 's ' + bsr + 'transform';
         transePlugin.damu(dragItem, 'translateX', targetX);
 
-      })  
+      })
     }
 
-    // 快速滑屏
+    // 轮播
+    function carouse(arr) {
+      //   布局
+      var baseLength = arr.length;
+      arr = arr.concat(arr); //合并数组，目的是做无缝滚动
+      var courseWrap = document.querySelector(".courseWrap");
+      if (courseWrap) {
+        var ulNode = document.createElement("ul");
+        var styleNode = document.createElement('style');
+        ulNode.classList.add("list");
+        for (var i = 0; i < arr.length; i++) {
+          ulNode.innerHTML +=
+            '<li><a href="javascript:;"><img src="' +
+            arr[i] +
+            '" alt=""></a></li>';
+        }
+        styleNode.innerHTML = '.courseWrap .list{list-style: none;width: ' + (arr.length) * 100 +
+          '%;overflow: hidden;} .courseWrap .list li{width: ' + (1 / arr.length * 100) + '%;} '
+        courseWrap.appendChild(ulNode);
+        document.head.appendChild(styleNode);
+
+      }
+
+      //   滑屏
+      var starX = 0; //手指开始点击的位置
+      var elementX = 0; //元素一开始的位置
+      courseWrap.addEventListener('touchstart', function (ev) {
+        ev = ev || event;
+        var touchC = ev.changedTouches[0];
+        starX = touchC.clientX;
+        elementX = transePlugin.damu(ulNode, 'translateX');
+        // 无缝逻辑  点击第一组的第一张时，瞬间跳到第二组的最后一张，点击第二组的最后一张，瞬间跳到第一组的第一张
+        var index = transePlugin.damu(ulNode, 'translateX') / document.documentElement.clientWidth; //index代表ul的位置
+        if (-index === 0) {
+          index = -baseLength
+        } else if (-index === (arr.length - 1)) {
+          index = -(baseLength - 1)
+        }
+        transePlugin.damu(ulNode, 'translateX', index * (document.documentElement.clientWidth));
+        ulNode.style.transition = 'none'
+      })
+      courseWrap.addEventListener('touchmove', function (ev) {
+        ev = ev || event;
+        var touchC = ev.changedTouches[0];
+        var nowX = touchC.clientX;
+        var disX = nowX - starX;
+        transePlugin.damu(ulNode, 'translateX', elementX + disX);
+      })
+      courseWrap.addEventListener('touchend', function (ev) {
+        ev = ev || event;
+        var index = transePlugin.damu(ulNode, 'translateX') / document.documentElement.clientWidth;
+        index = Math.round(index);
+        if (index > 0) {
+          index = 0;
+        }
+        if (index < 1 - arr.length) {
+          index = 1 - arr.length;
+        }
+        ulNode.style.transition = 'transform 1s'
+        transePlugin.damu(ulNode, 'translateX', index * (document.documentElement.clientWidth))
+      })
+    }
 
 
     init()
