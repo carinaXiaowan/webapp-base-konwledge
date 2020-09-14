@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1 " />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>music tai</title>
   <link rel="stylesheet" href="/assets/styles/music.css" />
@@ -30,9 +30,50 @@
         <a href="javascrit:;" class='search'>搜索</a>
       </div>
     </div>
+    <!-- 导航 -->
+    <div class="content">
+      <div class="nav onepx">
+        <ul class='list'>
+          <li>
+            <a href="javascript:;" class='active'>全部</a>
+          </li>
+          <li>
+            <a href="javascript:;">首页</a>
+          </li>
+          <li>
+            <a href="javascript:;">分类</a>
+          </li>
+          <li>
+            <a href="javascript:;">母婴</a>
+          </li>
+          <li>
+            <a href="javascript:;">女装</a>
+          </li>
+          <li>
+            <a href="javascript:;">男装</a>
+          </li>
+          <li>
+            <a href="javascript:;">家电</a>
+          </li>
+          <li>
+            <a href="javascript:;">食物</a>
+          </li>
+          <li>
+            <a href="javascript:;">美妆</a>
+          </li>
+          <li>
+            <a href="javascript:;">宠物</a>
+          </li>
+          <li>
+            <a href="javascript:;">房产</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- 导航结束 -->
   </div>
-  <!-- 导航 -->
 </body>
+<script src='/damu.js'></script>
 <script>
   window.onload = function () {
     // 阻止事件的默认行为
@@ -49,8 +90,58 @@
       styleNode.innerHTML = "html{font-size: " + w + "px!important}";
       document.head.appendChild(styleNode);
     })();
+    var init = function(){
+      drag();
+    }
+    // 导航滑屏
+    var drag = function(){
+      // 滑屏区域
+      var dragArea = document.querySelector('#wrap .content .nav');
+      // 滑屏元素
+      var dragItem = document.querySelector('#wrap .content .nav .list');
+      var startX = 0;
+      var elementX = 0;
+      var miniX = dragArea.clientWidth - dragItem.offsetWidth;
+      dragArea.addEventListener('touchstart',function(ev){
+        ev = ev || event;
+        var touchC = ev.changedTouches[0];
+        startX = touchC.clientX;
+        elementX = transePlugin.damu(dragItem, 'translateX');
+        dragItem.style.transition = none;
+      })
+      dragArea.addEventListener('touchmove',function(ev){
+        ev = ev || event;
+        var touchC = ev.changedTouches[0];
+        var nowX = touchC.clientX;
+        var disX = nowX - startX; //每次滑动的距离
+        var translateX = elementX+disX;
+        // 橡皮筋效果 在move的过程中，每一次touchmove真正的有效距离慢慢变小，元素的滑动距离变大
+        //(偏移量和布局视口的宽度,分母越大，拉力越大)
+        // 只有在判断中，才有拉力效果
+        if(translateX > 0){
+          var scare = document.documentElement.clientWidth/((document.documentElement.clientWidth+translateX)*1.5);
+          translateX = elementX + disX*scare;
+        }else if(translateX < miniX){
+          var scare = document.documentElement.clientWidth/((document.documentElement.clientWidth + (miniX - translateX))*1.5);
+          translateX = elementX + disX*scare;
+        }
+        transePlugin.damu(dragItem, 'translateX', translateX);
+      })
+      dragArea.addEventListener('touchend',function(ev){
+        translateX = transePlugin.damu(dragItem, 'translateX');
+        dragItem.style.transition = 'transform 1s';
+        if(translateX > 0){
+          translateX = 0;
+          transePlugin.damu(dragItem, 'translateX', translateX);
+        }else if(translateX < miniX){
+          translateX = miniX;
+          transePlugin.damu(dragItem, 'translateX', translateX);
+        }
+      })
+    }
+    
 
-
+    init()
   };
 </script>
 
