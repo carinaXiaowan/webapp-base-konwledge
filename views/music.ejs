@@ -35,8 +35,8 @@
       <!-- 导航 -->
       <div class="nav onepx">
         <ul class='list'>
-          <li>
-            <a href="javascript:;" class='active'>全部</a>
+          <li class='active'>
+            <a href="javascript:;">全部</a>
           </li>
           <li>
             <a href="javascript:;">首页</a>
@@ -108,6 +108,22 @@
     var init = function () {
       drag();
       carouse(arr);
+      changeColor();
+    }
+
+    var changeColor = function () {
+      var list = document.querySelector('#wrap .content .nav .list');
+      var liNodes = document.querySelectorAll('#wrap .content .nav .list li');
+      list.addEventListener('touchend', function (ev) {
+        ev = ev || event;
+        var touchC = ev.changedTouches[0];
+        for (var i = 0; i < liNodes.length; i++) {
+          liNodes[i].classList.remove('active');
+          if (touchC.target.nodeName.toUpperCase() === 'A' || touchC.target.nodeName.toUpperCase() === 'LI') {
+            liNodes[i].classList.add('active');
+          }
+        }
+      })
     }
     // 导航滑屏
     var drag = function () {
@@ -236,9 +252,9 @@
         var touchC = ev.changedTouches[0];
         var nowX = touchC.clientX;
         var nowY = touchC.clientY;
-        var disX = nowX - starX;    
-        var disY = nowY - starY;    
-        if(Math.abs(disY) > Math.abs(disX)){ //说明在Y轴上滑动
+        var disX = nowX - starX;
+        var disY = nowY - starY;
+        if (Math.abs(disY) > Math.abs(disX)) { //说明在Y轴上滑动
           return; //目的是防抖动，上下滚动，不触发轮播图
         }
         transePlugin.damu(ulNode, 'translateX', elementX + disX);

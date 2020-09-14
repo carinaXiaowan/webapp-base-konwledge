@@ -130,7 +130,7 @@ a,input,button{-webkit-tap-highlight-color: rgba(0,0,0); -webkit-appearance: non
 #wrap .content .nav .list a{
     color: #333;
 }
-#wrap .content .nav .list a.active,#wrap .content .nav .list a:hover{
+#wrap .content .nav .list li.active a,#wrap .content .nav .list a:hover{
     color:#2170d6;
 }
 
