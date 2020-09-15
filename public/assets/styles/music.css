@@ -109,9 +109,9 @@ a,input,button{-webkit-tap-highlight-color: rgba(0,0,0); -webkit-appearance: non
 #wrap .content .nav{
     width: 100%;
     overflow: hidden;
-    height: calc(var(--baserem)*60rem);
-    padding-top: calc(var(--baserem)*15rem);
-    padding-bottom: calc(var(--baserem)*15rem);
+    height: calc(var(--baserem)*50rem);
+    padding-top: calc(var(--baserem)*10rem);
+    padding-bottom: calc(var(--baserem)*10rem);
     border-bottom: calc(var(--baserem)*1rem) solid #eee;
 }
 #wrap .content .nav .list{
@@ -155,4 +155,73 @@ a,input,button{-webkit-tap-highlight-color: rgba(0,0,0); -webkit-appearance: non
 
 #wrap .courseWrap .list li{
     float: left;
+}
+#wrap .tapWrap{
+    display: flex;
+    flex-direction: column;
+    padding:calc(var(--baserem)*10rem) calc(var(--baserem)*10rem);
+    background: #eee;
+}
+#wrap .tapWrap .tapHeader{
+    display: flex;
+    justify-content: space-between;
+    line-height:  calc(var(--baserem)*30rem)
+}
+#wrap .tapWrap .tapHeader h2{
+    font-size: calc(var(--baserem)*24rem);
+    color:#333;
+    font-weight: bold;
+}
+#wrap .tapWrap .tapHeader span{
+    font-size: calc(var(--baserem)*14rem);
+    color:#333;
+}
+
+#wrap .tapWrap .tapNav{
+    margin-top: calc(var(--baserem)*10rem);
+    height: calc(var(--baserem)*40rem);
+    line-height: calc(var(--baserem)*40rem);
+}
+#wrap .tapWrap .tapNav div{
+    display: flex;
+}
+#wrap .tapWrap .tapNav div a{
+    display: block;
+    width: calc(var(--baserem)*60rem);
+    height: calc(var(--baserem)*40rem);
+    text-align: center;
+    color: #333;
+    font-size: calc(var(--baserem)*14rem);
+}
+#wrap .tapWrap .tapNav div a.active,#wrap .tapWrap .tapNav div a:hover{
+    border-bottom: calc(var(--baserem)*5rem) solid #2170d6;
+}
+#wrap .tapWrap .tapContent ul{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: calc(var(--baserem)*10rem)
+}
+#wrap .tapWrap .tapContent ul li{
+    width: calc(var(--baserem)*177rem);
+    padding: 0 calc(var(--baserem)*10rem);
+}
+#wrap .tapWrap .tapContent ul li a{
+    display: flex;
+    flex-direction: column;
+    color: #333;
+    font-size: calc(var(--baserem)*14rem);
+}
+#wrap .tapWrap .tapContent ul li a img{
+    width: 100%;
+    height: calc(var(--baserem)*98rem);
+    margin-bottom: calc(var(--baserem)*5rem);
+}
+#wrap .tapWrap .tapContent .tapDiscuss{
+    display: flex;
+}
+#wrap .tapWrap .tapContent .tapDiscuss div{
+    margin-right: calc(var(--baserem)*10rem);
+    font-size:  calc(var(--baserem)*12rem);
+    margin-bottom: calc(var(--baserem)*10rem);
+    margin-top: calc(var(--baserem)*5rem);
 }
