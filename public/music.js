@@ -215,6 +215,7 @@ window.onload = function () {
         var isX = true; //防抖动
         var isFirst = true;
         nodes.addEventListener("touchstart",function(ev){
+            nodes.style.transition = 'none'
             ev = ev || event;
             var touchC = ev.changedTouches[0];
             startPoint = {
@@ -250,10 +251,48 @@ window.onload = function () {
                 }
             }
             transePlugin.damu(nodes, 'translateX', disPoint.x + elementPoint.x);
+            // 1/2跳转
+            jump(nodes, wrap, disPoint.x );
         })
         nodes.addEventListener("touchend",function(ev){
             ev = ev || event;
+            var touchC = ev.changedTouches[0];
+            var nowPoint = {
+                x: touchC.clientX,
+                y: touchC.clientY,       
+            }
+            var disPoint = {
+                x: nowPoint.x - startPoint.x,
+                y: nowPoint.y - startPoint.y
+            }
+            back(nodes, wrap, disPoint.x);
         })
+    }
+
+    var jump = function(nodes, wrap, disX){
+        var moveX = wrap.offsetWidth;
+        if(Math.abs(disX) > moveX/2){
+            nodes.style.transition = 'transform 1s';
+            if(disX > 0){
+                // 右滑
+                transePlugin.damu(nodes, 'translateX', 0);
+            }else{
+                transePlugin.damu(nodes, 'translateX', -moveX);
+            }
+        }
+    }
+
+    var back = function(nodes, wrap, disX){
+        var moveX = wrap.offsetWidth;
+        if(Math.abs(disX) <= moveX/2){
+            nodes.style.transition = 'transform 1s';
+            if(disX > 0){
+                // 右滑
+                transePlugin.damu(nodes, 'translateX', -moveX);
+            }else{
+                transePlugin.damu(nodes, 'translateX', 0);
+            }
+        }
     }
 
     init()
