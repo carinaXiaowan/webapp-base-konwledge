@@ -194,7 +194,7 @@ window.onload = function () {
     // tap选项卡
     var tap = function(){
         var wrap =  document.querySelector('#wrap .tapWrap');
-        var contentNodes = document.querySelector('#wrap .tapWrap .tapContent');
+        var contentNodes = document.querySelectorAll('#wrap .tapWrap .tapContent');
         for(var i=0; i<contentNodes.length; i++){
             move(contentNodes[i], wrap);
         }
@@ -202,7 +202,58 @@ window.onload = function () {
 
     var move = function(nodes, wrap){
         var moveX = wrap.offsetWidth;
-        transePlugin.damu(nodes, 'translateX', moveX);
+        transePlugin.damu(nodes, 'translateX', -moveX);
+        // 滑屏逻辑，content即是滑屏区域，又是滑屏元素
+        var startPoint = {
+            x: 0,
+            y: 0,
+        };
+        var elementPoint = {
+            x: 0,
+            y: 0,
+        };
+        var isX = true; //防抖动
+        var isFirst = true;
+        nodes.addEventListener("touchstart",function(ev){
+            ev = ev || event;
+            var touchC = ev.changedTouches[0];
+            startPoint = {
+                x: touchC.clientX,
+                y: touchC.clientY,
+            }
+            elementPoint = {
+                x: transePlugin.damu(nodes, 'translateX'),
+                y: transePlugin.damu(nodes, 'translateY')
+            }
+            isX = true;
+            isFirst = true;
+        })
+        nodes.addEventListener("touchmove",function(ev){
+            ev = ev || event;
+            if(!isX){
+                return; 
+            }
+            var touchC = ev.changedTouches[0];
+            var nowPoint = {
+                x: touchC.clientX,
+                y: touchC.clientY,       
+            }
+            var disPoint = {
+                x: nowPoint.x - startPoint.x,
+                y: nowPoint.y - startPoint.y
+            }
+            if(isFirst){ //判断第一次的方向
+                isFirst = false;
+                if(Math.abs(disPoint.y) - Math.abs(disPoint.x) > 0){
+                    isX = false;
+                    return;
+                }
+            }
+            transePlugin.damu(nodes, 'translateX', disPoint.x + elementPoint.x);
+        })
+        nodes.addEventListener("touchend",function(ev){
+            ev = ev || event;
+        })
     }
 
     init()
