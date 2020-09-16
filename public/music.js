@@ -14,7 +14,7 @@ window.onload = function () {
         document.head.appendChild(styleNode);
     })();
 
-    
+
     var arr = [
         "https://iknow-pic.cdn.bcebos.com/b64543a98226cffc192273a6b9014a90f603ea9e",
         "https://image-c-dev.weimobwmc.com/qa-saas-wxbiz/b3854b2e1af0462c8e845840c200b888.jpeg?imageMogr2/thumbnail/500x",
@@ -25,6 +25,7 @@ window.onload = function () {
         drag();
         carouse(arr);
         changeColor();
+        tap();
     }
 
     var changeColor = function () {
@@ -190,6 +191,19 @@ window.onload = function () {
         })
     }
 
+    // tap选项卡
+    var tap = function(){
+        var wrap =  document.querySelector('#wrap .tapWrap');
+        var contentNodes = document.querySelector('#wrap .tapWrap .tapContent');
+        for(var i=0; i<contentNodes.length; i++){
+            move(contentNodes[i], wrap);
+        }
+    }
+
+    var move = function(nodes, wrap){
+        var moveX = wrap.offsetWidth;
+        transePlugin.damu(nodes, 'translateX', moveX);
+    }
 
     init()
 };

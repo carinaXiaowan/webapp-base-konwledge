@@ -103,7 +103,8 @@ a,input,button{-webkit-tap-highlight-color: rgba(0,0,0); -webkit-appearance: non
     bottom:0;
     left:0;
     right: 0;
-    /* background:#f0e4c9; */
+    background:#f0e4c9;
+    overflow: auto;
 }
 
 #wrap .content .nav{
@@ -197,13 +198,13 @@ a,input,button{-webkit-tap-highlight-color: rgba(0,0,0); -webkit-appearance: non
     border-bottom: calc(var(--baserem)*5rem) solid #2170d6;
 }
 #wrap .tapWrap .tapContent ul{
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: calc(var(--baserem)*10rem)
+    margin-top: calc(var(--baserem)*10rem);
+    overflow: hidden;
 }
 #wrap .tapWrap .tapContent ul li{
     width: calc(var(--baserem)*177rem);
     padding: 0 calc(var(--baserem)*10rem);
+    float: left;
 }
 #wrap .tapWrap .tapContent ul li a{
     display: flex;
