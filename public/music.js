@@ -192,16 +192,20 @@ window.onload = function () {
     }
 
     // tap选项卡
-    var tap = function(){
-        var wrap =  document.querySelector('#wrap .tapWrap');
+    var tap = function () {
+        var wrap = document.querySelector('#wrap .tapWrap');
         var contentNodes = document.querySelectorAll('#wrap .tapWrap .tapContent');
-        for(var i=0; i<contentNodes.length; i++){
+        for (var i = 0; i < contentNodes.length; i++) {
             move(contentNodes[i], wrap);
         }
     }
-
-    var move = function(nodes, wrap){
+    var move = function (nodes, wrap) {
         var moveX = wrap.offsetWidth;
+        // 抽象小绿下标
+        var smallG = document.querySelector('#wrap .tapWrap .tapNav .smallG');
+        var aNodes = document.querySelectorAll('#wrap .tapWrap .tapNav a');
+        smallG.style.width = aNodes[0].offsetWidth-20+'px';
+        var now = 0;
         transePlugin.damu(nodes, 'translateX', -moveX);
         // 滑屏逻辑，content即是滑屏区域，又是滑屏元素
         var startPoint = {
@@ -215,7 +219,7 @@ window.onload = function () {
         var isX = true; //防抖动
         var isFirst = true;
         var isOver = false;
-        nodes.addEventListener("touchstart",function(ev){
+        nodes.addEventListener("touchstart", function (ev) {
             nodes.style.transition = 'none'
             ev = ev || event;
             var touchC = ev.changedTouches[0];
@@ -231,43 +235,43 @@ window.onload = function () {
             isFirst = true;
             isOver = false;
         })
-        nodes.addEventListener("touchmove",function(ev){
+        nodes.addEventListener("touchmove", function (ev) {
             ev = ev || event;
-            if(!isX){
-                return; 
+            if (!isX) {
+                return;
             }
-            if(isOver){
+            if (isOver) {
                 return;
             }
             var touchC = ev.changedTouches[0];
             var nowPoint = {
                 x: touchC.clientX,
-                y: touchC.clientY,       
+                y: touchC.clientY,
             }
             var disPoint = {
                 x: nowPoint.x - startPoint.x,
                 y: nowPoint.y - startPoint.y
             }
-            if(isFirst){ //判断第一次的方向
+            if (isFirst) { //判断第一次的方向
                 isFirst = false;
-                if(Math.abs(disPoint.y) - Math.abs(disPoint.x) > 0){
+                if (Math.abs(disPoint.y) - Math.abs(disPoint.x) > 0) {
                     isX = false;
                     return;
                 }
             }
             transePlugin.damu(nodes, 'translateX', disPoint.x + elementPoint.x);
             // 1/2跳转  加标志位，在touchmove的过程中只执行一次\
-            jump(disPoint.x );
+            jump(disPoint.x);
         })
-        nodes.addEventListener("touchend",function(ev){
-            if(isOver){
+        nodes.addEventListener("touchend", function (ev) {
+            if (isOver) {
                 return;
-            }       
+            }
             ev = ev || event;
             var touchC = ev.changedTouches[0];
             var nowPoint = {
                 x: touchC.clientX,
-                y: touchC.clientY,       
+                y: touchC.clientY,
             }
             var disPoint = {
                 x: nowPoint.x - startPoint.x,
@@ -276,31 +280,74 @@ window.onload = function () {
             back(nodes, wrap, disPoint.x);
         })
 
-        var jump = function(disX){
-            if(isOver){
+        var jump = function (disX) {
+            if (isOver) {
                 return;
             }
             var moveX = wrap.offsetWidth;
-            if(Math.abs(disX) > moveX/2){
-                console.info(2)
+            var translateX = transePlugin.damu(nodes, 'translateX');
+            if (Math.abs(disX) > moveX / 2) {
                 isOver = true;
                 nodes.style.transition = 'transform 1s';
-                var targetX = disX > 0 ? 0 : -moveX;
+                var targetX
+                // dis<0  左滑   dis>0 右滑
+                if (disX < 0) {
+                    if (Math.abs(translateX) < moveX) {
+                        targetX = -moveX;
+                    } else {
+                        targetX = -2 * moveX;
+                    }
+                } else {
+                    if (Math.abs(translateX) > moveX) {
+                        targetX = -moveX
+                    } else {
+                        targetX = -0
+                    }
+                }
                 transePlugin.damu(nodes, 'translateX', targetX);
                 nodes.addEventListener('transitionend', endFun) //动画结束发请求，防止动画冲突
+                nodes.addEventListener('webkitTransitionEnd', endFun) //动画结束发请求，防止动画冲突
+            }
+
+           function endFun () {
+                // 循环定时器，回调函数头部第一行清定时器
+                // DOM 绑定transitionend事件，第一件事是解绑
+                var loadings = nodes.querySelectorAll('#wrap .tapWrap .tapContent .tapLoading li');
+                nodes.removeEventListener('transitionend', endFun);
+                nodes.removeEventListener('webkitTransitionEnd', endFun);
+                //小绿
+                disX > 0 ? now-- :now++;
+                if(now<0){
+                    now = aNodes.length -1;
+                }else if(now>aNodes.length -1 ){
+                    now = 0;
+                }
+                transePlugin.damu(smallG, 'translateX', aNodes[now].offsetLeft);
+                if(aNodes[now].offsetWidth !== smallG.offsetWidth){
+                    smallG.style.width = aNodes[now].offsetWidth-20+'px';
+                }
+
+                for(var i=0; i<loadings.length; i++){
+                    loadings[i].style.opacity = 1;
+                }
+                // loading出现，发送请求， 请求结束，node要回到-moveX的位置
+                setTimeout(function(){ //因为没有接口，模拟接口请求
+                    for(var i=0; i<loadings.length; i++){
+                        loadings[i].style.opacity = 0;
+                    }
+                    isOver = false;
+                    transePlugin.damu(nodes, 'translateX', -moveX);
+                }, 2000);
             }
         }
-    
-        var endFun = function(){
-                console.info(1)
-        }
-    }
 
-    var back = function(nodes, wrap, disX){
+        
+    }
+    var back = function (nodes, wrap, disX) {
         var moveX = wrap.offsetWidth;
-        if(Math.abs(disX) <= moveX/2){
+        if (Math.abs(disX) <= moveX / 2) {
             nodes.style.transition = 'transform 1s';
-            var targetX =  0 ;
+            var targetX = 0;
             transePlugin.damu(nodes, 'translateX', targetX);
         }
     }
