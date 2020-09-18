@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>webapp demo</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+        html,body{
+            height: 100%;
+            overflow: hidden;
+        }
+        .wrap{
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #ffe9ab;
+            font-size: 0.5rem;
+            color:#333;
+            line-height: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class='wrap'>
+        <div class='content'></div>
+    </div>
+</body>
+<script src="/damu.js"></script>
+<script>
+    // 设配方案
+    (function () {
+        var dpr = window.devicePixelRatio || 1;
+        var scale = 1 / dpr;
+
+        //方案二   rem的适配     尺寸根据视口宽度来  rem的定义  
+        var styleNode = document.createElement('style');
+        var w = document.documentElement.clientWidth / 16;
+        styleNode.innerHTML = "html{font-size: " + w + "px!important}"
+        document.head.appendChild(styleNode);
+
+        // 缩小操作
+        var meta = document.querySelector("meta[name='viewport']");
+        meta.content = "width=device-width,initial-scale=" + scale + ",user-scalable=no,minimum-scale=" + scale +
+            ",maximum-scale=" + scale;
+
+        // 滚动
+        var wrap = document.querySelector('.wrap');
+        var content = document.querySelector('.wrap .content');
+        for(var i=0; i<500; i++){
+            content.innerHTML +='<div>'+i +'啦啦啦，我是卖报的小当家</div>'
+        }
+
+        transePlugin.moveY(wrap);
+    })()
+</script>
+
+</html>

@@ -3,6 +3,7 @@
     transePlugin.damu = damu;
     transePlugin.moveX = moveX;
     transePlugin.bannerMove = bannerMove;
+    transePlugin.moveY = moveY;
 
     function damu(node, type, val) {
         if (typeof node == 'object' && typeof node['transform'] === 'undefined') {
@@ -164,6 +165,79 @@
             }
             ulNode.style.transition = 'transform 1s'
             transePlugin.damu(ulNode, 'translateX', index * (document.documentElement.clientWidth))
+        })
+    }
+
+    function moveY(dragArea){
+        var dragItem = dragArea.children[0];
+        var startY = 0;
+        var elementY = 0;
+        var miniY = dragArea.clientHeight - dragItem.offsetHeight;
+        // 款速滑屏的必要元素
+        var lastTime = 0;
+        var lastPoint = 0;
+        var timeDis = 0;
+        var pointDis = 0;
+        dragArea.addEventListener('touchstart', function (ev) {
+            ev = ev || event;
+            var touchC = ev.changedTouches[0];
+            startY = touchC.clientY;
+            elementY = transePlugin.damu(dragItem, 'translateY');
+            dragItem.style.transition = "none";
+
+            // 快速滑屏
+            lastTime = new Date().getTime();
+            lastPoint = transePlugin.damu(dragItem, 'translateY');
+            pointDis = 0; //目的是让点击的时候，元素不动，清除速度残留
+        })
+        dragArea.addEventListener('touchmove', function (ev) {
+            ev = ev || event;
+            var touchC = ev.changedTouches[0];
+            var nowY = touchC.clientY;
+            var disY = nowY - startY; //每次滑动的距离
+            var translateY = elementY + disY;
+            // 橡皮筋效果 在move的过程中，每一次touchmove真正的有效距离慢慢变小，元素的滑动距离变大
+            //(偏移量和布局视口的宽度,分母越大，拉力越大)
+            // 只有在判断中，才有拉力效果
+            if (translateY > 0) {
+                var scare = document.documentElement.clientHeight / ((document.documentElement.clientHeight +
+                    translateY) * 1.5);
+                translateY = elementY + disY * scare;
+            } else if (translateY < miniY) {
+                var scare = document.documentElement.clientHeight / ((document.documentElement.clientHeight + (miniY -
+                    translateY)) * 1.5);
+                translateY = elementY + disY * scare;
+            }
+            transePlugin.damu(dragItem, 'translateY', translateY);
+
+            // 快速滑屏
+            var nowTime = new Date().getTime();
+            var nowPoint = transePlugin.damu(dragItem, 'translateY');
+            timeDis = nowTime - lastTime;
+            pointDis = nowPoint - lastPoint;
+            lastTime = nowTime;
+            lastPoint = nowPoint;
+        })
+
+        dragArea.addEventListener('touchend', function (ev) {
+            var translateY = transePlugin.damu(dragItem, 'translateY');
+            timeDis = timeDis == 0 ? 1 : timeDis; //防止点击后，时间差为0；
+            var speed = pointDis / timeDis; //快速滑屏   速度越大，位移越远
+            speed = Math.abs(speed) < 0.5 ? 0 : speed; //防止中间块滑动的时候，产生抖动
+            var targetY = translateY + speed * 200;
+            var time = Math.abs(speed) * 0.2;
+            time = time < 1 ? 1 : time;
+            var bsr = '';
+            if (targetY > 0) {
+                targetY = 0;
+                bsr = 'cubic-bezier(0.26,1.51,0.68,1.54)';
+            } else if (targetY < miniY) {
+                targetY = miniY;
+                bsr = 'cubic-bezier(0.26,1,0.68,1)';
+            }
+            dragItem.style.transition = time + 's ' + bsr + 'transform';
+            transePlugin.damu(dragItem, 'translateY', targetY);
+
         })
     }
 })(window)
