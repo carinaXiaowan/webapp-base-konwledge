@@ -200,7 +200,7 @@ a,input,button{-webkit-tap-highlight-color: rgba(0,0,0); -webkit-appearance: non
     height: calc(var(--baserem)*2rem);
     background: #2170d6;
     position: absolute;
-    transition: transform 2s, width 2s;
+    transition: transform 1s, width 1s;
 }
 
 #wrap .tapWrap .tapContent{
