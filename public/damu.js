@@ -49,7 +49,7 @@
         }
     }
 
-    function moveX(dragArea, dragItem){
+    function moveX(dragArea, dragItem) {
         var startX = 0;
         var elementX = 0;
         var miniX = dragArea.clientWidth - dragItem.offsetWidth;
@@ -121,7 +121,7 @@
         })
     }
 
-    function bannerMove(courseWrap, ulNode, arr, baseLength){
+    function bannerMove(courseWrap, ulNode, arr, baseLength) {
         var starX = 0; //手指开始点击的位置
         var starY = 0;
         var elementX = 0; //元素一开始的位置
@@ -168,10 +168,33 @@
         })
     }
 
-    function moveY(dragArea){
+    function moveY(dragArea) {
         var dragItem = dragArea.children[0];
-        var startY = 0;
-        var elementY = 0;
+        transePlugin.damu(dragArea, 'tanslateZ', 0); //图层在同一个
+        var startPoint = {
+            x: 0,
+            y: 0
+        };
+        var elementPoint = {
+            x: 0,
+            y: 0
+        };
+        var isY = true;
+        var isFirst = true;
+
+        //即点即听
+        var clearTime = 0;
+        var Tween = {
+            linear: function(t,b,c,d){
+                return c*t/d+b;
+            },
+            back: function(t,b,c,d,s){
+                if(s == 'undefined'){
+                    s = 1.70158
+                }
+                return  c*((t=t/d-1)*t*((s+1)*t+s)+1)+b
+            },
+        }
         var miniY = dragArea.clientHeight - dragItem.offsetHeight;
         // 款速滑屏的必要元素
         var lastTime = 0;
@@ -181,33 +204,63 @@
         dragArea.addEventListener('touchstart', function (ev) {
             ev = ev || event;
             var touchC = ev.changedTouches[0];
-            startY = touchC.clientY;
-            elementY = transePlugin.damu(dragItem, 'translateY');
+            startPoint = {
+                x: touchC.clientX,
+                y: touchC.clientY,
+            };
+            elementPoint = {
+                x: transePlugin.damu(dragItem, 'translateX'),
+                y: transePlugin.damu(dragItem, 'translateY')
+            }
             dragItem.style.transition = "none";
 
             // 快速滑屏
             lastTime = new Date().getTime();
             lastPoint = transePlugin.damu(dragItem, 'translateY');
             pointDis = 0; //目的是让点击的时候，元素不动，清除速度残留
+
+            isY = true;
+            isFirst = true;
+
+            // 即点即听
+            clearInterval(clearTime);   
         })
         dragArea.addEventListener('touchmove', function (ev) {
+            if (!isY) {
+                return;
+            }
             ev = ev || event;
             var touchC = ev.changedTouches[0];
-            var nowY = touchC.clientY;
-            var disY = nowY - startY; //每次滑动的距离
-            var translateY = elementY + disY;
+            var nowPoint = {
+                x: touchC.clientX,
+                y: touchC.clientY,
+            };
+            var disPoint = {
+                x: nowPoint.x - startPoint.x,
+                y: nowPoint.y - startPoint.y
+            } //每次滑动的距离
+
+            if (isFirst) { //判断第一次的方向
+                isFirst = false;
+                if (Math.abs(disPoint.x) - Math.abs(disPoint.y) > 0) {
+                    isY = false;
+                    return;
+                }
+            }
+            var translateY = elementPoint.y + disPoint.y;
             // 橡皮筋效果 在move的过程中，每一次touchmove真正的有效距离慢慢变小，元素的滑动距离变大
             //(偏移量和布局视口的宽度,分母越大，拉力越大)
             // 只有在判断中，才有拉力效果
             if (translateY > 0) {
                 var scare = document.documentElement.clientHeight / ((document.documentElement.clientHeight +
                     translateY) * 1.5);
-                translateY = elementY + disY * scare;
+                translateY = elementPoint.y + (disPoint.y) * scare;
             } else if (translateY < miniY) {
                 var scare = document.documentElement.clientHeight / ((document.documentElement.clientHeight + (miniY -
                     translateY)) * 1.5);
-                translateY = elementY + disY * scare;
+                translateY = elementPoint.y + (disPoint.y) * scare;
             }
+
             transePlugin.damu(dragItem, 'translateY', translateY);
 
             // 快速滑屏
@@ -227,17 +280,40 @@
             var targetY = translateY + speed * 200;
             var time = Math.abs(speed) * 0.2;
             time = time < 1 ? 1 : time;
-            var bsr = '';
+            //var bsr = '';
+            var type = 'linear';
             if (targetY > 0) {
                 targetY = 0;
-                bsr = 'cubic-bezier(0.26,1.51,0.68,1.54)';
+                type='back';
+                //bsr = 'cubic-bezier(0.26,1.51,0.68,1.54)';
             } else if (targetY < miniY) {
                 targetY = miniY;
-                bsr = 'cubic-bezier(0.26,1,0.68,1)';
+                type='back';    
+                //bsr = 'cubic-bezier(0.26,1,0.68,1)';
             }
-            dragItem.style.transition = time + 's ' + bsr + 'transform';
-            transePlugin.damu(dragItem, 'translateY', targetY);
-
+            bsr(targetY,type,time); //定点动画
+            // dragItem.style.transition = time + 's ' + bsr + 'transform';
+            // transePlugin.damu(dragItem, 'translateY', targetY);
+            /* 元素没有渲染完成，没有办法触发过渡
+               tansform切换下，如果前后transform属性值，变换位置不一样，没办法触发过渡
+               没办法拿到tansition中的任何帧的状态 */
         })
+
+        function bsr(targetY,type,time) {
+            clearInterval(clearTime);
+            var s = 1;
+            var t = 0; //当前次数
+            var b = transePlugin.damu(dragItem, 'translateY'); //初始位置
+            var c = targetY - b; //初始位置和最终位置的差值
+            var d = time*1000/(1000/60); //总次数
+            clearTime = setInterval(function(){
+                t++
+                if(t>d){
+                    clearInterval(clearTime);
+                }
+                var point = Tween[type](t,b,c,d,s);
+                transePlugin.damu(dragItem, 'translateY', point)
+            },1000/60)
+        }
     }
 })(window)
